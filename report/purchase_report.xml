@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="purchase_extra_fields_layout">
+            <!-- Multicompany -->
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+
+            <!-- <t t-call="report.external_layout_header"/> -->
+             <div class="header" style="font-size: 8pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri;">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 45px;"/>
+                    </div>
+                    <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.rml_header1"/>
+                </div>
+                <div class="row zero_min_height">
+                    <div class="col-xs-12">
+                        <div style="border-bottom: 1px solid black;"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" name="company_address">
+                        <span t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}" style="border-bottom: 1px solid black; display:inline-block;"/>
+                    </div>
+                    <t class="text-right">RFC: RLU-840130-J27</t>
+                </div>
+            </div>
+
+
+            <t t-raw="0" />
+
+            <div class="footer">
+
+                <div class="footer" style="font-size: 8pt;font-family:Helvetica,Verdana,Arial,sans,Lucida Grande,Calibri;">
+                    EL MATERIAL QUE AMPARA ESTA ORDEN DE COMPRA DEBE VENIR ACOMPAÑADO CON CERTIFICADO DE CALIDAD (EXCEPTO INDIRECTOS)<br/>
+                    <t>RE-09-01-01 REV .04</t>
+                    <div class="text-center" style="border-top: 1px solid black;">
+                        <ul t-if="not company.custom_footer" class="list-inline">
+                            <t t-set="company" t-value="company.sudo()"/>
+                            <li t-if="company.phone">Phone: <span t-field="company.phone"/></li>
+
+                            <li t-if="company.fax and company.phone">&amp;bull;</li>
+                            <li t-if="company.fax">Fax: <span t-field="company.fax"/></li>
+
+                            <li t-if="company.email and company.fax or company.email and company.phone">&amp;bull;</li>
+                            <li t-if="company.email">Email: <span t-field="company.email"/></li>
+
+                            <li t-if="company.website and company.email or company.website and company.fax or company.website and company.phone">&amp;bull;</li>
+                            <li t-if="company.website">Website: <span t-field="company.website"/></li>
+                            
+                            <li>&amp;bull;</li>
+                            <li>F-118</li>
+                        </ul>
+
+                        <ul t-if="not company.custom_footer" class="list-inline" name="financial_infos">
+                            <li t-if="company.vat">TIN: <span t-field="company.vat"/></li>
+                        </ul>
+
+                        <t t-if="company.custom_footer">
+                            <span t-raw="company.rml_footer"/>
+                        </t>
+
+                        <ul class="list-inline">
+                            <li>Page:</li>
+                            <li><span class="page"/></li>
+                            <li>/</li>
+                            <li><span class="topage"/></li>
+                        </ul>
+                    </div>
+                </div>  
+
+<!--                 <div class="row" style="font-size: 8px;">
+                    <table style="width: 100%">
+                        <tr style="text-align: left;padding-left:20px;border-bottom:1px dotted #AAAAAA;">
+                            <td style="width: 15%">
+                                <b>EL MATERIAL QUE AMPARA ESTA ORDEN DE COMPRA DEBE VENIR ACOMPAÑADO CON CERTIFICADO DE CALIDAD (EXCEPTO INDIRECTOS)<br/></b>
+                                <t>RE-09-01-01 REV .04</t>
+
+                            </td>
+                        </tr>
+                    </table>
+                </div> -->
+
+
+
+            </div>
+        </template>
+
+        <template id="report_purchaseorder_document_extra_fields" inherit_id="purchase.report_purchaseorder_document">
+
+            <xpath expr="//table[@class='table table-condensed']/thead/tr/th" position="before">
+                <th><strong>Product</strong></th>
+            </xpath>
+
+            <xpath expr="//table[@class='table table-condensed']/tbody/tr/td" position="before">
+                <td>
+                    <span t-field="line.product_id.name"/>
+                </td>
+            </xpath>
+
+
+            <xpath expr="//t/t" position="attributes">
+                <attribute name="t-call">raloy_purchase_fields.purchase_extra_fields_layout</attribute>
+            </xpath>
+
+            <!-- <xpath expr="//div[@class='page']/div/div/div[2]" position="after">
+                Payment term: <span t-field="o.partner_id.property_supplier_payment_term_id.name"/>
+            </xpath> -->
+
+            <xpath expr="//div[@class='page']/div[3]" position="inside">
+                <!-- <div t-if="o.name" class="col-xs-3">
+                    <strong>Delivery date:</strong>
+                    <p t-field="o.date_planned"/>
+                </div> -->
+                <div t-if="o.name" class="col-xs-3">
+                    <strong>Payment Term:</strong>
+                    <p t-field="o.partner_id.property_supplier_payment_term_id.name"/>
+                </div>
+                <div t-if="o.name" class="col-xs-3">
+                    <strong>Buyer:</strong>
+                    <p t-field="o.create_uid.partner_id.name"/>
+                </div>
+            </xpath>
+
+            <p t-field="o.notes" position="before">
+                <span t-field="o.amount_to_text"/>
+            </p>
+
+             <xpath expr="//table[@class='table table-condensed']/thead/tr/th[4]" position="replace">
+                <th class="text-center"><strong>Delivery date</strong></th>
+            </xpath>
+            <xpath expr="//table[@class='table table-condensed']/thead/tr/th[3]" position="replace">
+            </xpath>
+            <xpath expr="//table[@class='table table-condensed']/tbody/tr/td[3]" position="replace">
+            </xpath>
+
+            <p t-field="o.notes" position="before">
+            <br/>
+            <div>
+                <strong>Banking Instructions</strong>
+                <p t-field="o.partner_id.banking_instructions"/>
+                <strong>Shipping Instructions</strong>
+                <p t-field="o.partner_id.shipping_instructions"/>
+<!--                 <strong>Border Custom Service</strong>
+                <p t-field="o.partner_id.border_custom_service"/>
+                <strong>Mexican Customs</strong>
+                <p t-field="o.partner_id.mexican_customs"/>
+                <strong>Contact Details</strong>
+                <p t-field="o.partner_id.contact_details"/> -->
+            </div>
+            </p>
+
+
+        </template>
+
+
+
+        <!-- PRESUPUESTO -->
+
+        <template id="report_purchasequotation_document_extra_fields" inherit_id="purchase.report_purchasequotation_document">
+
+            <xpath expr="//table[@class='table table-condensed']/thead/tr/th[2]" position="replace">
+                <th class="text-center"><strong>Delivery date</strong></th>
+            </xpath>
+
+            <xpath expr="//table[@class='table table-condensed']/thead/tr/th[3]" position="after">
+                <th class="text-right"><strong>Unit Price</strong></th>
+                <th class="text-right"><strong>Net Price</strong></th>
+            </xpath>
+
+            <xpath expr="//table[@class='table table-condensed']/thead/tr/th" position="before">
+                <th><strong>Product</strong></th>
+            </xpath>
+
+            <xpath expr="//table[@class='table table-condensed']/tbody/tr/td[3]" position="after">
+                <td class="text-right">
+                    <span t-field="order_line.price_unit"/>
+                </td>
+                <td class="text-right">
+                    <span t-field="order_line.price_subtotal"
+                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                </td>
+            </xpath>
+
+            <xpath expr="//table[@class='table table-condensed']/tbody/tr/td" position="before">
+                <td>
+                    <span t-field="order_line.product_id.name"/>
+                </td>
+            </xpath>
+
+
+            <xpath expr="//t/t" position="attributes">
+                <attribute name="t-call">raloy_purchase_fields.purchase_extra_fields_layout</attribute>
+            </xpath>
+
+
+
+            <xpath expr="//h2" position="after">
+
+                <div class="row mt32 mb32">
+                    <div t-if="o.name" class="col-xs-3">
+                        <strong>Our Order Reference:</strong>
+                        <p t-field="o.name"/>
+                    </div>
+                    <div t-if="o.partner_ref" class="col-xs-3">
+                        <strong>Your Order Reference</strong>
+                        <p t-field="o.partner_ref"/>
+                    </div>
+                    <div t-if="o.date_order" class="col-xs-3">
+                        <strong>Quotation Date:</strong>
+                        <p t-field="o.date_order"/>
+                    </div>
+                    <div t-if="o.name" class="col-xs-3">
+                        <strong>Payment Term:</strong>
+                        <p t-field="o.partner_id.property_supplier_payment_term_id.name"/>
+                    </div>
+                    <div t-if="o.name" class="col-xs-3">
+                        <strong>Buyer:</strong>
+                        <p t-field="o.create_uid.partner_id.name"/>
+                    </div>
+                </div>
+            </xpath>
+
+            <p t-field="o.notes" position="before">
+                <div class="row">
+                    <div class="col-xs-4 pull-right">
+                        <table class="table table-condensed">
+                            <tr class="border-black">
+                                <td><strong>Total Without Taxes</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.amount_untaxed"
+                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Taxes</td>
+                                <td class="text-right">
+                                    <span t-field="o.amount_tax"
+                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td><strong>Total</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.amount_total"
+                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <span t-field="o.amount_to_text"/>
+            </p>
+
+            <p t-field="o.notes" position="before">
+            <br/>
+            <div>
+                <strong>Banking Instructions</strong>
+                <p t-field="o.partner_id.banking_instructions"/>
+                <strong>Shipping Instructions</strong>
+                <p t-field="o.partner_id.shipping_instructions"/>
+            </div>
+            </p>
+
+
+        </template>
+
+
+    </data>
+</openerp>
