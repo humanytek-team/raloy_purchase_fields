@@ -185,4 +185,3 @@ msgstr ""
 #: model:ir.model.fields,field_description:raloy_purchase_fields.field_purchase_order_amount_to_text
 msgid "Written Amount"
 msgstr "Importe con letra"
-

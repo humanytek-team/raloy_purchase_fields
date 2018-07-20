@@ -19,23 +19,20 @@
 #
 ##############################################################################
 {
-    'name' : 'Purchase extra fields',
-    'version' : '1.0',
-    'author' : 'Humanytek',
-    'category' : 'Purchase',
-    'description' : """
+    'name': 'Purchase extra fields',
+    'version': '1.0.1',
+    'author': 'Humanytek',
+    'category': 'Purchase',
+    'description': """
     Adds fields to purchase module
     """,
-    'depends' : ['purchase'],
+    'depends': [
+        'purchase',
+    ],
     'data': [
-        #'purchase_view.xml',
         'partner_view.xml',
         'report/purchase_report.xml',
     ],
-
-
-    'installable': True,
-    'auto_install': False,
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

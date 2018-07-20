@@ -1,33 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
+  <data>
     <record id="view_partner_form_extra_fields" model="ir.ui.view">
-        <field name="name">view_partner_form_extra_fields</field>
-        <field name="model">res.partner</field>
-        <field name="type">form</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//notebook/page[3]" position="after">
-                <page name='foreign_commerce' string="Foreign Commerce">
-                    <group>
-                        <!-- <label for="banking_instructions"/> -->
-                        <field name="banking_instructions"/>
-
-                        <!-- <label for="shipping_instructions"/> -->
-                        <field name="shipping_instructions"/>
-
-                        <!-- <label for="border_custom_service"/> -->
-                        <!-- <field name="border_custom_service"/> -->
-
-                        <!-- <label for="contact_details"/> -->
-                        <!-- <field name="contact_details"/> -->
-
-                        <!-- <label for="mexican_customs"/> -->
-                        <!-- <field name="mexican_customs"/> -->
-                    </group>
-                </page>
-            </xpath>
-        </field>
+      <field name="name">view_partner_form_extra_fields</field>
+      <field name="model">res.partner</field>
+      <field name="type">form</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//notebook/page[3]" position="after">
+          <page name='foreign_commerce' string="Foreign Commerce">
+            <group>
+              <field name="banking_instructions"/>
+              <field name="shipping_instructions"/>
+            </group>
+          </page>
+        </xpath>
+      </field>
     </record>
-
+  </data>
 </odoo>

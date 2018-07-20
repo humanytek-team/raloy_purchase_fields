@@ -13,8 +13,8 @@ class payroll_advice_report(models.AbstractModel):
 
     def get_month(self, input_date):
         res = {
-               'from_name': '', 'to_name': ''
-               }
+            'from_name': '', 'to_name': ''
+        }
         slip = self.env['hr.payslip'].search([('date_from', '<=', input_date), ('date_to', '>=', input_date)], limit=1)
         if slip:
             from_date = datetime.strptime(slip.date_from, '%Y-%m-%d')
@@ -35,12 +35,12 @@ class payroll_advice_report(models.AbstractModel):
         for l in line_ids:
             res = {}
             res.update({
-                    'name': l.employee_id.name,
-                    'acc_no': l.name,
-                    'ifsc_code': l.ifsc_code,
-                    'bysal': l.bysal,
-                    'debit_credit': l.debit_credit,
-                    })
+                'name': l.employee_id.name,
+                'acc_no': l.name,
+                'ifsc_code': l.ifsc_code,
+                'bysal': l.bysal,
+                'debit_credit': l.debit_credit,
+            })
             self.total_bysal += l.bysal
             result.append(res)
         return result
